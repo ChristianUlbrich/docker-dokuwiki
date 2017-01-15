@@ -1,5 +1,4 @@
 FROM alpine:3.4
-MAINTAINER Ilya Stepanov <dev@ilyastepanov.com>
 
 ENV DOKUWIKI_VERSION 2016-06-26a
 ENV MD5_CHECKSUM 9b9ad79421a1bdad9c133e859140f3f2
@@ -13,6 +12,7 @@ RUN mkdir -p /run/nginx && \
     curl -O -L "https://download.dokuwiki.org/src/dokuwiki/dokuwiki-$DOKUWIKI_VERSION.tgz" && \
     tar -xzf "dokuwiki-$DOKUWIKI_VERSION.tgz" --strip 1 && \
     rm "dokuwiki-$DOKUWIKI_VERSION.tgz" && \
+    #make data persistent and move it to dokuwiki-storage
     mv /var/www/data/pages /var/dokuwiki-storage/data/pages && \
     ln -s /var/dokuwiki-storage/data/pages /var/www/data/pages && \
     mv /var/www/data/meta /var/dokuwiki-storage/data/meta && \
@@ -25,8 +25,12 @@ RUN mkdir -p /run/nginx && \
     ln -s /var/dokuwiki-storage/data/media_meta /var/www/data/media_meta && \
     mv /var/www/data/attic /var/dokuwiki-storage/data/attic && \
     ln -s /var/dokuwiki-storage/data/attic /var/www/data/attic && \
+    #make config persistent
     mv /var/www/conf /var/dokuwiki-storage/conf && \
     ln -s /var/dokuwiki-storage/conf /var/www/conf
+    #make plugins persistent
+    mv /var/www/lib/plugins /var/dokuwiki-storage/plugins && \
+    ln -s /var/dokuwiki-storage/plugins /var/www/lib/plugins
 
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD supervisord.conf /etc/supervisord.conf
