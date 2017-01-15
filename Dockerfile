@@ -3,8 +3,11 @@ FROM alpine:3.4
 ENV DOKUWIKI_VERSION 2016-06-26a
 ENV MD5_CHECKSUM 9b9ad79421a1bdad9c133e859140f3f2
 
+RUN apk --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ add \
+    libressl2.4-libssl libressl2.4-libcrypto
+
 RUN apk --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ add \
-    php7 php7-fpm php7-gd php7-session php7-xml nginx supervisor curl tar
+    php7 php7-fpm php7-gd php7-openssl php7-session php7-xml php7-zlib nginx supervisor curl tar
 
 RUN mkdir -p /run/nginx && \
     mkdir -p /var/www /var/dokuwiki-storage/data && \
@@ -27,7 +30,7 @@ RUN mkdir -p /run/nginx && \
     ln -s /var/dokuwiki-storage/data/attic /var/www/data/attic && \
     #make config persistent
     mv /var/www/conf /var/dokuwiki-storage/conf && \
-    ln -s /var/dokuwiki-storage/conf /var/www/conf
+    ln -s /var/dokuwiki-storage/conf /var/www/conf && \
     #make plugins persistent
     mv /var/www/lib/plugins /var/dokuwiki-storage/plugins && \
     ln -s /var/dokuwiki-storage/plugins /var/www/lib/plugins
