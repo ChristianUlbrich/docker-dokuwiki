@@ -4,7 +4,7 @@ ENV DOKUWIKI_VERSION 2017-02-19e
 ENV MD5_CHECKSUM 09bf175f28d6e7ff2c2e3be60be8c65f
 
 RUN apk --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ add \
-    libressl2.4-libssl libressl2.4-libcrypto
+    libressl2.5-libssl libressl2.5-libcrypto libwebp
 
 RUN apk --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ add \
     php7 php7-fpm php7-gd php7-openssl php7-session php7-xml php7-zlib nginx supervisor curl tar
